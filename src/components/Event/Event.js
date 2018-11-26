@@ -34,7 +34,7 @@ class Event extends Component {
   };
 
   componentDidMount() {
-    this.subscribeItems = this.refItems.onSnapshot(this.onItemsUpdate);
+    this.subscribeItems = this.refItems.orderBy('name').onSnapshot(this.onItemsUpdate);
     this.refEventDoc.get().then((doc) => {
       const { title, description } = doc.data();
       this.setState({
