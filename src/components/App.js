@@ -5,6 +5,8 @@ import AppProvider, { AppContext } from "../providers/AppProvider";
 import Event from './Event/Event';
 import Login from './Login/Login';
 
+import CssBaseline from '@material-ui/core/CssBaseline';
+
 class App extends Component {
 
   render() {
@@ -12,9 +14,14 @@ class App extends Component {
       <AppProvider>
         <AppContext.Consumer>
           {appContext => (
-            appContext.state.user.loggedIn
-            ? <Event appContext={appContext} />
-            : <Login appContext={appContext} />
+            <>
+              <CssBaseline />
+              {
+                appContext.state.user.loggedIn
+                  ? <Event appContext={appContext} />
+                  : <Login appContext={appContext} />
+              }
+            </>
           )}
         </AppContext.Consumer>
       </AppProvider>

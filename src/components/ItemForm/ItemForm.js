@@ -1,4 +1,39 @@
 import React, { Component } from "react";
+import Button from "@material-ui/core/Button";
+import MenuItem from "@material-ui/core/MenuItem";
+import Paper from "@material-ui/core/Paper";
+import TextField from "@material-ui/core/TextField";
+import { withStyles } from "@material-ui/core/styles";
+
+const dishTypes = [
+  {
+    value: "main",
+    label: "Main Dish"
+  },
+  {
+    value: "side",
+    label: "Side"
+  },
+  {
+    value: "dessert",
+    label: "Dessert"
+  },
+  {
+    value: "other",
+    label: "Other"
+  }
+];
+
+const styles = theme => ({
+  paper: {
+    padding: theme.spacing.unit * 2,
+    display: "flex",
+    flexDirection: "column"
+  },
+  formItem: {
+    marginBottom: theme.spacing.unit * 4
+  }
+});
 
 class ItemForm extends Component {
   state = {
@@ -7,7 +42,7 @@ class ItemForm extends Component {
     dishType: "",
     otherInfo: "",
     user: "",
-    email: ""
+    volunteer: ""
   };
 
   handleChange = e => {
@@ -19,79 +54,98 @@ class ItemForm extends Component {
 
   handleSumbit = e => {
     e.preventDefault();
+    this.setState({
+      name: "",
+      description: "",
+      dishType: "",
+      otherInfo: "",
+      user: "",
+      volunteer: ""
+    });
     this.props.createItem(this.state);
   };
 
   render() {
-    const loading = false;
+    const { classes } = this.props;
+
     return (
       <form onSubmit={this.handleSumbit}>
-        What are you bringing?
-        <fieldset disabled={loading} aria-busy={loading}>
-          <label htmlFor="name">
-            Name
-            <input
-              type="text"
-              id="name"
-              name="name"
-              placeholder="what are you bringing"
-              required
-              value={this.state.name}
-              onChange={this.handleChange}
-            />
-          </label>
-          <label htmlFor="email">
-            Email of who is bringing it
-            <input
-              type="text"
-              id="email"
-              name="email"
-              placeholder=""
-              value={this.state.email}
-              onChange={this.handleChange}
-            />
-          </label>
-          <label htmlFor="description">
-            Description
-            <textarea
-              type="text"
-              id="description"
-              name="description"
-              placeholder="describe it"
-              value={this.state.description}
-              onChange={this.handleChange}
-            />
-          </label>
-          <label htmlFor="dishType">
-            Dish Type
-            <select
-              id="dishType"
-              name="dishType"
-              required
-              value={this.state.dishType}
-              onChange={this.handleChange}
-            >
-              <option value="mainDish">Main Dish</option>
-              <option value="side">Side</option>
-              <option value="dessert">Dessert</option>
-            </select>
-          </label>
-          <label htmlFor="otherInfo">
-            Additional/Allergin Info
-            <textarea
-              type="text"
-              id="otherInfo"
-              name="otherInfo"
-              placeholder="Let us know of any allergens in your dish"
-              value={this.state.otherInfo}
-              onChange={this.handleChange}
-            />
-          </label>
-        </fieldset>
-        <button type="submit">Submit</button>
+        <Paper className={classes.paper}>
+          <TextField
+            type="text"
+            id="volunteer"
+            name="volunteer"
+            label="Who's bringing the dish"
+            placeholder=""
+            required
+            value={this.state.volunteer}
+            onChange={this.handleChange}
+            variant="outlined"
+            className={classes.formItem}
+          />
+          <TextField
+            type="text"
+            id="name"
+            name="name"
+            label="Dish Name"
+            placeholder="What are you bringing"
+            required
+            value={this.state.name}
+            onChange={this.handleChange}
+            variant="outlined"
+            className={classes.formItem}
+          />
+          <TextField
+            type="text"
+            id="description"
+            name="description"
+            label="Description"
+            placeholder="Dish description"
+            required
+            multiline
+            value={this.state.description}
+            onChange={this.handleChange}
+            variant="outlined"
+            className={classes.formItem}
+          />
+          <TextField
+            id="dishType"
+            select
+            label="Dish Type"
+            name="dishType"
+            type="text"
+            value={this.state.dishType}
+            onChange={this.handleChange}
+            helperText="Please select the type of dish you are bringing"
+            margin="normal"
+            variant="outlined"
+            className={classes.formItem}
+          >
+            {dishTypes.map(option => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            type="text"
+            id="otherInfo"
+            name="otherInfo"
+            label="Additional/Allergen Info"
+            placeholder="Any additional or allergen info about the dish"
+            multiline
+            value={this.state.otherInfo}
+            onChange={this.handleChange}
+            variant="outlined"
+            className={classes.formItem}
+          />
+          <Button variant="outlined" type="submit">
+            Add Item
+          </Button>
+        </Paper>
       </form>
     );
   }
 }
 
-export default ItemForm;
+export default withStyles(styles)(ItemForm);
